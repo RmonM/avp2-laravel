@@ -16,14 +16,14 @@ class AuthController extends Controller
         $fields = $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|unique:users,email', // email único na tabela users
-            'password' => 'required|string|confirmed' // exige um campo password_confirmation
+            'password' => 'required|string|min:6|confirmed' // exige minímo de 6 caracteres e confirmação
         ]);
 
         // 2. Criar o usuário no banco
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
-            'password' => bcrypt($fields['password']) // Criptografa a senha
+            'password' => Hash::make($fields['password']) // Criptografa a senha
         ]);
 
         // 3. Criar o Token (para ele já sair logado)
